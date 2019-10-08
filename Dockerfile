@@ -1,15 +1,14 @@
 FROM golang:1.12.5
 RUN apt-get update && apt-get install unzip
-WORKDIR /go/src/github.com/grafeas
-RUN git clone https://github.com/grafeas/grafeas
-RUN git clone https://github.com/liatrio/grafeascli
-WORKDIR /go/src/github.com/grafeas/grafeas
-RUN make build
-WORKDIR /go/src/github.com/liatrio/grafeascli/go
-RUN GO111MODULE=on CGO_ENABLED=0 go build -o grafeascli .
+RUN go get google.golang.org/genproto/googleapis/grafeas/v1 google.golang.org/grpc google.golang.org/grpc/credentials
+COPY ./go/main.go /go/main.go
+WORKDIR /go
+RUN go build -o grafeas-cli .
+COPY ca.crt client.key client.crt ./
+ENTRYPOINT ["./grafeas-cli"]
 
 #FROM alpine:latest
 #WORKDIR /
-#COPY --from=0 /go/bin/grafeascli /grafeascli
+#COPY --from=0 /go/grafeas-cli /grafeas-cli
 #COPY ca.crt client.key client.crt /
-#ENTRYPOINT ["/grafeascli"]
+#ENTRYPOINT ["./grafeas-cli"]

@@ -21,16 +21,16 @@ import (
 	"io/ioutil"
 	"log"
 
-	pb "github.com/grafeas/grafeas/proto/v1beta1/grafeas_go_proto"
+	pb "google.golang.org/genproto/googleapis/devtools/containeranalysis/v1beta1/grafeas"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
 
 const (
 	// TODO: Update the paths below.
-	certFile = "/path/to/client.crt"
-	keyFile  = "/path/to/client.key"
-	caFile   = "/path/to/ca.crt"
+	certFile = "./client.crt"
+	keyFile  = "./client.key"
+	caFile   = "./ca.crt"
 )
 
 func main() {
