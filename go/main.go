@@ -28,8 +28,8 @@ import (
 
 const (
 	// TODO: Update the paths below.
-	certFile = "./client.crt"
-	keyFile  = "./client.key"
+	certFile = "./ca.crt"
+	keyFile  = "./ca.key"
 	caFile   = "./ca.crt"
 )
 
@@ -53,8 +53,13 @@ func main() {
 		Certificates: []tls.Certificate{cert},
 		RootCAs:      caCertPool,
 	}
+
+
 	tlsConfig.BuildNameToCertificate()
 	creds := credentials.NewTLS(tlsConfig)
+
+  log.Println(creds)
+
 	conn, err := grpc.Dial("localhost:8080", grpc.WithTransportCredentials(creds))
 	defer conn.Close()
 	client := pb.NewGrafeasV1Beta1Client(conn)
@@ -68,10 +73,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if len(resp.Notes) != 0 {
-		log.Println(resp.Notes)
-	} else {
-		log.Println("Project does not contain any notes")
-	}
+  if len(resp.Notes) != 0 {
+    log.Println(resp.Notes)
+  } else {
+    log.Println("Project does not contain any notes")
+  }
 }
 
